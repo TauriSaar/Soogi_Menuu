@@ -8,7 +8,7 @@ import re
 header = {'User-Agent': 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'}
 
 #ühendame veebilehe
-base_url = "http://192.168.22.172/menu-example/"
+base_url = "https://siseveeb.voco.ee/veebivormid/sookla_menuu"
 
 #taotleme veebilehelt infot
 r = requests.get(base_url,headers=header)
@@ -23,7 +23,6 @@ if r.status_code == 200:
     #teeme for loopi ja leiab kõik järgimed spetsiifilist infot
     for book in books:
         nimetus1 = book.find('h3').text
-        print(nimetus1)
         toidud = book.contents[2].h2.contents[0]
         hind = book.contents[2].span.contents[0]
         lisainfo = book.find('small').text
@@ -31,6 +30,7 @@ if r.status_code == 200:
         #ühendab leitud info tähendustega
         single ={'nimetus':nimetus1,'toidud':[{'nimetus':toidud, 'hind':hind.replace("€", ""), 'lisainfo':lisainfo }], }
         result.append(single)
+        print(result)
         #kirjutab kõik selle info Json faili
         with open('söögimenüü.json','w', encoding="UTF-8") as f:
             json.dump(result,f,indent=4)
